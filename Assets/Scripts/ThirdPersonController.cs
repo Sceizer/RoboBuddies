@@ -5,8 +5,12 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public class ThirdPersonController : MonoBehaviour
 {
+    [Header("General settings")]
+    public bool isPlayerControlled = true;
+
     [Header("Character movement")]
     public float movementSpeed = 5f;
+    public float jumpStrength = 5f;
     private Rigidbody objectRb;
 
     [Header("Character camera")]
@@ -32,18 +36,34 @@ public class ThirdPersonController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float hori = Input.GetAxis("Horizontal");
-        float vert = Input.GetAxis("Vertical");
-
-        ApplyMovement(hori, vert);
-        CalculateNewCameraPosition();
+        if (isPlayerControlled)
+        {
+            ApplyMovement();
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Jump();
+            }
+        }
+        if (usesCamera)
+        {
+            CalculateNewCameraPosition();
+        }
     }
 
-    void ApplyMovement(float horizontalMovement, float verticalMovement)
+    public void ApplyMovement()
     {
-        Vector3 newVel = Quaternion.Euler(0, CameraRotation.x, 0) * new Vector3(horizontalMovement, 0, verticalMovement) * movementSpeed;
+        float hori = Input.GetAxis("Horizontal");
+        float vert = Input.GetAxis("Vertical");
+        Vector3 newVel = Quaternion.Euler(0, CameraRotation.x, 0) * new Vector3(hori, 0, vert) * movementSpeed;
         //Setting the Y axis to the current object velocity so that falling down can still work normaly
         newVel.y = objectRb.velocity.y;
+        objectRb.velocity = newVel;
+    }
+    
+    public void Jump()
+    {
+        Vector3 newVel = objectRb.velocity;
+        newVel.y = jumpStrength;
         objectRb.velocity = newVel;
     }
 
