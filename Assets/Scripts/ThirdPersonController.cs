@@ -14,6 +14,7 @@ public class ThirdPersonController : MonoBehaviour
     public Transform characterCamera;
     public float cameraSensitivity = 5f;
     public float cameraDistance = 5f;
+    public Vector2 pitchLimit = new Vector2(-45f, 90f);
 
     private Vector2 CameraRotation = Vector2.zero;
 
@@ -34,9 +35,6 @@ public class ThirdPersonController : MonoBehaviour
         float hori = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
 
-        CameraRotation.x += Input.GetAxis("Mouse X") * cameraSensitivity;
-        CameraRotation.y -= Input.GetAxis("Mouse Y") * cameraSensitivity;
-
         ApplyMovement(hori, vert);
         CalculateNewCameraPosition();
     }
@@ -51,6 +49,13 @@ public class ThirdPersonController : MonoBehaviour
 
     void CalculateNewCameraPosition()
     {
+        //Get mouse movement for this frame
+        CameraRotation.x += Input.GetAxis("Mouse X") * cameraSensitivity;
+        CameraRotation.y -= Input.GetAxis("Mouse Y") * cameraSensitivity;
+
+        //Limit the angle of the Y angle of the camera
+        CameraRotation.y = Mathf.Clamp(CameraRotation.y, pitchLimit.x, pitchLimit.y);
+
         Vector3 cameraDirection = transform.forward * -1f;
         //Rotate the direction so that the camera can look at different angles
         cameraDirection = Quaternion.Euler(CameraRotation.y, CameraRotation.x,0) * cameraDirection;
@@ -72,6 +77,6 @@ public class ThirdPersonController : MonoBehaviour
         }
 
         characterCamera.position = transform.position + cameraDirection * distanceTheCameraCanGoBack;
-        characterCamera.LookAt(transform.position);
+        characterCamera.rotation = Quaternion.Euler(CameraRotation.y, CameraRotation.x, 0);
     }
 }
