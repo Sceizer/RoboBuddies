@@ -34,7 +34,7 @@ public class ThirdPersonController : MonoBehaviour
         float hori = Input.GetAxis("Horizontal");
         float vert = Input.GetAxis("Vertical");
 
-        CameraRotation.x -= Input.GetAxis("Mouse X") * cameraSensitivity;
+        CameraRotation.x += Input.GetAxis("Mouse X") * cameraSensitivity;
         CameraRotation.y -= Input.GetAxis("Mouse Y") * cameraSensitivity;
 
         ApplyMovement(hori, vert);
@@ -43,7 +43,7 @@ public class ThirdPersonController : MonoBehaviour
 
     void ApplyMovement(float horizontalMovement, float verticalMovement)
     {
-        Vector3 newVel = new Vector3(horizontalMovement, 0, verticalMovement) * movementSpeed;
+        Vector3 newVel = Quaternion.Euler(0, CameraRotation.x, 0) * new Vector3(horizontalMovement, 0, verticalMovement) * movementSpeed;
         //Setting the Y axis to the current object velocity so that falling down can still work normaly
         newVel.y = objectRb.velocity.y;
         objectRb.velocity = newVel;
