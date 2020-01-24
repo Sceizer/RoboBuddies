@@ -11,6 +11,8 @@ public class ThirdPersonController : MonoBehaviour
     [Header("Character movement")]
     public float movementSpeed = 5f;
     public float jumpStrength = 5f;
+    float distToGround = 0;
+
     private Rigidbody objectRb;
 
     [Header("Character camera")]
@@ -30,6 +32,8 @@ public class ThirdPersonController : MonoBehaviour
         {
             Debug.LogError(name + " ThirdpersonController: Current character Camera is not a camera object!");
         }
+        distToGround = GetComponent<Collider>().bounds.extents.y;
+
         Cursor.lockState = CursorLockMode.Locked;
     }
 
@@ -38,7 +42,9 @@ public class ThirdPersonController : MonoBehaviour
     {
         if (isPlayerControlled)
         {
-            ApplyMovement();
+            float hori = Input.GetAxis("Horizontal");
+            float vert = Input.GetAxis("Vertical");
+            ApplyMovement(hori, vert);
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 Jump();
@@ -50,11 +56,9 @@ public class ThirdPersonController : MonoBehaviour
         }
     }
 
-    public void ApplyMovement()
+    public void ApplyMovement(float horizontal, float vertical)
     {
-        float hori = Input.GetAxis("Horizontal");
-        float vert = Input.GetAxis("Vertical");
-        Vector3 newVel = Quaternion.Euler(0, CameraRotation.x, 0) * new Vector3(hori, 0, vert) * movementSpeed;
+        Vector3 newVel = Quaternion.Euler(0, CameraRotation.x, 0) * new Vector3(horizontal, 0, vertical) * movementSpeed;
         //Setting the Y axis to the current object velocity so that falling down can still work normaly
         newVel.y = objectRb.velocity.y;
         objectRb.velocity = newVel;
@@ -62,9 +66,18 @@ public class ThirdPersonController : MonoBehaviour
     
     public void Jump()
     {
+        if (!CheckGrounded())
+        {
+            return;
+        }
         Vector3 newVel = objectRb.velocity;
         newVel.y = jumpStrength;
         objectRb.velocity = newVel;
+    }
+
+    bool CheckGrounded()
+    {
+        return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
     }
 
     void CalculateNewCameraPosition()
