@@ -37,28 +37,9 @@ public class ThirdPersonController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Movement(Vector2 newDir)
     {
-        if (isPlayerControlled)
-        {
-            float hori = Input.GetAxis("Horizontal");
-            float vert = Input.GetAxis("Vertical");
-            ApplyMovement(hori, vert);
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Jump();
-            }
-        }
-        if (usesCamera)
-        {
-            CalculateNewCameraPosition();
-        }
-    }
-
-    public void ApplyMovement(float horizontal, float vertical)
-    {
-        Vector3 movementDirection = Quaternion.Euler(0, CameraRotation.x, 0) * new Vector3(horizontal, 0, vertical);
+        Vector3 movementDirection = Quaternion.Euler(0, CameraRotation.x, 0) * new Vector3(newDir.x, 0, newDir.y);
         Vector3 newVel = movementDirection * movementSpeed;
         //Setting the Y axis to the current object velocity so that falling down can still work normaly
         newVel.y = objectRb.velocity.y;
@@ -84,11 +65,12 @@ public class ThirdPersonController : MonoBehaviour
         return Physics.Raycast(transform.position, -Vector3.up, distToGround + 0.1f);
     }
 
-    void CalculateNewCameraPosition()
+    public void RotateCameraView(Vector2 newCamMovement)
     {
+        Debug.Log(newCamMovement);
         //Get mouse movement for this frame
-        CameraRotation.x += Input.GetAxis("Mouse X") * cameraSensitivity;
-        CameraRotation.y -= Input.GetAxis("Mouse Y") * cameraSensitivity;
+        CameraRotation.x += newCamMovement.x * cameraSensitivity;
+        CameraRotation.y -= newCamMovement.y * cameraSensitivity;
 
         //Limit the angle of the Y angle of the camera
         CameraRotation.y = Mathf.Clamp(CameraRotation.y, pitchLimit.x, pitchLimit.y);
@@ -113,6 +95,7 @@ public class ThirdPersonController : MonoBehaviour
             }
         }
         characterCamera.position = transform.position + cameraDirection * distanceTheCameraCanGoBack;
+        //Setting the rotation of the camera so that it is still looking at the player
         characterCamera.rotation = Quaternion.Euler(CameraRotation.y, CameraRotation.x, 0);
     }
 }

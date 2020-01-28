@@ -16,35 +16,24 @@ public class GrabObject : MonoBehaviour
     //On what layer will the objects be
     public LayerMask pickUpableObjectLayer;
 
-    // Start is called before the first frame update
-    void Start()
+    public void GrabOrDrop()
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
+        if (currHoldingObject == null)
         {
-            if (currHoldingObject == null)
+            Transform newObjectToHold = CheckWhatObjectCanBeGrabbed();
+            if (newObjectToHold != null)
             {
-                Transform newObjectToHold = CheckWhatObjectCanBeGrabbed();
-                if(newObjectToHold != null)
-                {
-                    HoldObject(newObjectToHold);
-                }
+                HoldObject(newObjectToHold);
             }
-            else
-            {
-                DropObject();
-            }
+        }
+        else
+        {
+            DropObject();
         }
     }
 
     Transform CheckWhatObjectCanBeGrabbed()
     {
-        RaycastHit hit;
         Collider[] pickupableObjects = Physics.OverlapSphere(pickUpPosition.position, pickUpRange * 0.5f, pickUpableObjectLayer);
         if (pickupableObjects.Length > 0)
         {
