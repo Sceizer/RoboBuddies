@@ -39,14 +39,12 @@ public class ThirdPersonController : MonoBehaviour
 
     public void Movement(Vector2 newDir)
     {
+        Debug.Log(newDir);
         Vector3 movementDirection = Quaternion.Euler(0, CameraRotation.x, 0) * new Vector3(newDir.x, 0, newDir.y);
         Vector3 newVel = movementDirection * movementSpeed;
         //Setting the Y axis to the current object velocity so that falling down can still work normaly
         newVel.y = objectRb.velocity.y;
         objectRb.velocity = newVel;
-
-        //Make sure the player faces the way he is moving
-        transform.rotation = Quaternion.Euler(0, CameraRotation.x, 0);
     }
     
     public void Jump()
@@ -67,7 +65,6 @@ public class ThirdPersonController : MonoBehaviour
 
     public void RotateCameraView(Vector2 newCamMovement)
     {
-        Debug.Log(newCamMovement);
         //Get mouse movement for this frame
         CameraRotation.x += newCamMovement.x * cameraSensitivity;
         CameraRotation.y -= newCamMovement.y * cameraSensitivity;
@@ -75,7 +72,7 @@ public class ThirdPersonController : MonoBehaviour
         //Limit the angle of the Y angle of the camera
         CameraRotation.y = Mathf.Clamp(CameraRotation.y, pitchLimit.x, pitchLimit.y);
 
-        Vector3 cameraDirection = Vector3.forward * -1f;
+        Vector3 cameraDirection = Vector3.back;
         //Rotate the direction so that the camera can look at different angles
         cameraDirection = Quaternion.Euler(CameraRotation.y, CameraRotation.x,0) * cameraDirection;
 
@@ -97,5 +94,8 @@ public class ThirdPersonController : MonoBehaviour
         characterCamera.position = transform.position + cameraDirection * distanceTheCameraCanGoBack;
         //Setting the rotation of the camera so that it is still looking at the player
         characterCamera.rotation = Quaternion.Euler(CameraRotation.y, CameraRotation.x, 0);
+
+        //Make sure the player faces the way he is moving
+        transform.rotation = Quaternion.Euler(0, CameraRotation.x, 0);
     }
 }

@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
         controls.Player.Movement.performed += ctx => movementEvent.Invoke(ctx.ReadValue<Vector2>());
         controls.Player.Movement.canceled += ctx => movementEvent.Invoke(new Vector2(0,0));
 
-        //controls.Player.MouseMovement.performed += ctx => mouseMovementEvent.Invoke(ctx.ReadValue<Vector2>());
+        controls.Player.MouseMovement.performed += ctx => mouseMovementEvent.Invoke(ctx.ReadValue<Vector2>().normalized);
     }
 
     private void OnEnable()
