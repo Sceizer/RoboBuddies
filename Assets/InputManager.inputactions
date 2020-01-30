@@ -7,9 +7,9 @@
             "actions": [
                 {
                     "name": "Movement",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "b64841b3-21f2-4d4e-8797-b1ad7f88024d",
-                    "expectedControlType": "",
+                    "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": ""
                 },
@@ -25,6 +25,14 @@
                     "name": "MouseMovement",
                     "type": "Button",
                     "id": "a49ca870-b4f4-4934-aae6-087ff97a0811",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "5e82d5b3-be40-41af-8488-24a96929d6fb",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": ""
@@ -116,6 +124,17 @@
                     "processors": "ScaleVector2",
                     "groups": "Keyboard",
                     "action": "MouseMovement",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "50dbd876-d140-467b-a2ed-e6808e1e3431",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

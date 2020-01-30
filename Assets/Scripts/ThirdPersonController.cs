@@ -13,6 +13,8 @@ public class ThirdPersonController : MonoBehaviour
     public float jumpStrength = 5f;
     float distToGround = 0;
 
+    Vector2 movementDir = Vector2.zero;
+
     private Rigidbody objectRb;
 
     [Header("Character camera")]
@@ -37,14 +39,23 @@ public class ThirdPersonController : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    public void Movement(Vector2 newDir)
+    private void FixedUpdate()
     {
-        Debug.Log(newDir);
-        Vector3 movementDirection = Quaternion.Euler(0, CameraRotation.x, 0) * new Vector3(newDir.x, 0, newDir.y);
+        ApplyMovement();
+    }
+
+    void ApplyMovement()
+    {
+        Vector3 movementDirection = Quaternion.Euler(0, CameraRotation.x, 0) * new Vector3(movementDir.x, 0, movementDir.y);
         Vector3 newVel = movementDirection * movementSpeed;
         //Setting the Y axis to the current object velocity so that falling down can still work normaly
         newVel.y = objectRb.velocity.y;
         objectRb.velocity = newVel;
+    }
+
+    public void MoveInDirection(Vector2 newDir)
+    {
+        movementDir = newDir;
     }
     
     public void Jump()

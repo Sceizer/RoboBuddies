@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
     public Vector2Event movementEvent;
     public Vector2Event mouseMovementEvent;
     public UnityEvent interactEvent;
+    public UnityEvent jumpEvent;
 
     private void Awake()
     {
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
         controls.Player.Movement.canceled += ctx => movementEvent.Invoke(new Vector2(0,0));
 
         controls.Player.MouseMovement.performed += ctx => mouseMovementEvent.Invoke(ctx.ReadValue<Vector2>().normalized);
+        controls.Player.Jump.performed += ctx => jumpEvent.Invoke();
     }
 
     private void OnEnable()
