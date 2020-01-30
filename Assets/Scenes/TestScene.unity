@@ -684,7 +684,7 @@ MonoBehaviour:
   jumpStrength: 10
   usesCamera: 1
   characterCamera: {fileID: 960990361}
-  cameraSensitivity: 5
+  cameraSensitivity: 1
   cameraDistance: 5
   pitchLimit: {x: -15, y: 90}
 --- !u!54 &993827188
@@ -816,7 +816,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 993827187}
-        m_MethodName: Movement
+        m_MethodName: MoveInDirection
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -845,6 +845,20 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 993827193}
         m_MethodName: GrabOrDrop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  jumpEvent:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 993827187}
+        m_MethodName: Jump
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
