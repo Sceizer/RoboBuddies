@@ -39,7 +39,6 @@ public class PlayerController : MonoBehaviour
 
     public void Possess()
     {
-        Debug.Log("Possess");
         PlayerPossession.instance.PossessCharacter(possessToCharacter);
     }
 

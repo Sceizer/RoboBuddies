@@ -54,6 +54,10 @@ public class ThrowObject : MonoBehaviour
     {
         float x = progress * maxDistance;
         float y = x * Mathf.Tan(radianAngle) - ((grav * x * x) / (2 * throwStrengh * throwStrengh * Mathf.Cos(radianAngle) * Mathf.Cos(radianAngle)));
-        return new Vector3(x, y, 0);
+
+        Vector3 arcPoint = new Vector3(0, y, x);
+        arcPoint = transform.rotation * arcPoint;
+
+        return transform.position + arcPoint;
     }
 }
