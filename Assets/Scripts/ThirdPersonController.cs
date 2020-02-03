@@ -6,7 +6,8 @@ using UnityEngine;
 public class ThirdPersonController : MonoBehaviour
 {
     [Header("General settings")]
-    public bool isPlayerControlled = true;
+    [SerializeField]
+    private bool isPlayerControlled = true;
 
     [Header("Character movement")]
     public float movementSpeed = 5f;
@@ -42,6 +43,16 @@ public class ThirdPersonController : MonoBehaviour
     private void FixedUpdate()
     {
         ApplyMovement();
+    }
+
+    public void SetPlayerControlled(bool controlled)
+    {
+
+        if (characterCamera != null)
+        {
+            characterCamera.gameObject.SetActive(controlled);
+        }
+        isPlayerControlled = controlled;
     }
 
     void ApplyMovement()

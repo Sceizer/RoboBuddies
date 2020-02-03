@@ -14,8 +14,11 @@ public class PlayerController : MonoBehaviour
 
     public Vector2Event movementEvent;
     public Vector2Event mouseMovementEvent;
+
     public UnityEvent interactEvent;
     public UnityEvent jumpEvent;
+    public UnityEvent onPossess;
+    public UnityEvent onUnPossess;
 
     public PlayerController possessToCharacter;
 
@@ -43,10 +46,12 @@ public class PlayerController : MonoBehaviour
     private void OnEnable()
     {
         controls.Enable();
+        onPossess.Invoke();
     }
 
     private void OnDisable()
     {
         controls.Disable();
+        onUnPossess.Invoke();
     }
 }
