@@ -62,6 +62,14 @@ public class ThirdPersonController : MonoBehaviour
         //Setting the Y axis to the current object velocity so that falling down can still work normaly
         newVel.y = objectRb.velocity.y;
         objectRb.velocity = newVel;
+
+        if (movementDir.x != 0 || movementDir.y != 0)
+        {
+            //Make sure the player faces the way he is moving
+            transform.rotation = Quaternion.Euler(0, CameraRotation.x, 0);
+            CalculateCameraPosition();
+            CalculateCameraAngle();
+        }
     }
 
     public void MoveInDirection(Vector2 newDir)
@@ -91,12 +99,18 @@ public class ThirdPersonController : MonoBehaviour
         CameraRotation.x += newCamMovement.x * cameraSensitivity;
         CameraRotation.y -= newCamMovement.y * cameraSensitivity;
 
+        CalculateCameraPosition();
+        CalculateCameraAngle();
+    }
+
+    void CalculateCameraPosition()
+    {
         //Limit the angle of the Y angle of the camera
         CameraRotation.y = Mathf.Clamp(CameraRotation.y, pitchLimit.x, pitchLimit.y);
 
         Vector3 cameraDirection = Vector3.back;
         //Rotate the direction so that the camera can look at different angles
-        cameraDirection = Quaternion.Euler(CameraRotation.y, CameraRotation.x,0) * cameraDirection;
+        cameraDirection = Quaternion.Euler(CameraRotation.y, CameraRotation.x, 0) * cameraDirection;
 
         //Calculate distance between the character and the camera
         Ray collisionTestRay = new Ray(transform.position, cameraDirection);
@@ -108,16 +122,17 @@ public class ThirdPersonController : MonoBehaviour
         {
             distanceTheCameraCanGoBack = collisionInformation.distance;
 
-            if(distanceTheCameraCanGoBack > cameraDistance)
+            if (distanceTheCameraCanGoBack > cameraDistance)
             {
                 distanceTheCameraCanGoBack = cameraDistance;
             }
         }
         characterCamera.position = transform.position + cameraDirection * distanceTheCameraCanGoBack;
+    }
+
+    void CalculateCameraAngle()
+    {
         //Setting the rotation of the camera so that it is still looking at the player
         characterCamera.rotation = Quaternion.Euler(CameraRotation.y, CameraRotation.x, 0);
-
-        //Make sure the player faces the way he is moving
-        transform.rotation = Quaternion.Euler(0, CameraRotation.x, 0);
     }
 }
